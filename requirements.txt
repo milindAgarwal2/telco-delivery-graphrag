@@ -1,0 +1,33 @@
+# ===========================================================================
+# telco-delivery-graphrag — Phase 1 RAG baseline dependencies.
+# Reuses the parent ChatBOT project's proven RAG stack (LangChain + Chroma +
+# FastEmbed + Anthropic), trimmed to what the baseline needs. PDF/PPTX/Streamlit
+# are intentionally deferred (synthetic DMC docs are markdown/text). Neo4j driver
+# is included now for Phase 2 but unused by the RAG baseline.
+# ===========================================================================
+
+# --- LLM provider (optional at runtime; config.json can select "none") ---
+# anthropic 1.11.0's messages.create() does NOT accept `temperature`.
+anthropic==1.11.0
+
+# --- LangChain + vector store (core RAG) ---
+langchain
+langchain-core
+langchain-community
+langchain-chroma
+langchain-text-splitters
+chromadb
+
+# --- Local embeddings via ONNX (no torch/transformers): BAAI/bge-small-en-v1.5
+fastembed
+
+# --- Optional local SLM provider (Qwen2.5-1.5B GGUF via llama.cpp).
+# Only needed if config.json sets "llm_provider": "qwen". The .gguf is NOT shipped.
+llama-cpp-python
+
+# --- Graph store (Phase 2). Official Neo4j Python driver. Unused by Phase 1. ---
+neo4j
+
+# --- Utilities ---
+python-dotenv
+requests
