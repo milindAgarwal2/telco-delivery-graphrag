@@ -1,0 +1,49 @@
+# ===========================================================================
+# SENSITIVE DATA GUARD — read this first.
+# This is a LEARNING project. ONLY synthetic/sanitized data lives in the repo
+# (data/synthetic/). REAL DMC project material must NEVER be committed.
+# Put any real documents under data/private/ — it is git-ignored below.
+# ===========================================================================
+
+# Secrets
+.env
+*.key
+*.pem
+
+# Real / sensitive project data — NEVER commit. Only data/synthetic/ is tracked.
+data/private/
+data/private/**
+*.real.*
+
+# Common sensitive artifact types (defense in depth — don't commit these ever)
+*.pcap
+*.pcapng
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Generated graph / vector artifacts
+graph/export/
+chroma_*/
+*.sqlite3
+
+# Large session/handoff dumps — not for the repo
+handoff-session.json
+*handoff-session.json
+
+# Neo4j local data (if bind-mounted)
+neo4j/data/
+neo4j/logs/
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Keep the empty tracked folders
+!data/synthetic/.gitkeep
