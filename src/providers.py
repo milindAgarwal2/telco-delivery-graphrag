@@ -78,12 +78,14 @@ def resolve_provider(requested):
 # ---------------------------------------------------------------------------
 # Extractive (provider = "none")
 # ---------------------------------------------------------------------------
-def render_extractive(docs):
+def render_extractive(docs, graph_text=None):
     """Return the retrieved passages verbatim, each under a [<file> §<section>]
-    header. No LLM involved. Mirrors ChatBOT's extractive renderer."""
+    header. No LLM involved. Mirrors ChatBOT's extractive renderer. If
+    ``graph_text`` is supplied, the knowledge-graph relationships are appended as
+    a final block so the dependency chain is visible even with no model."""
     import os as _os
 
-    if not docs:
+    if not docs and not graph_text:
         return "I couldn't find anything relevant in the indexed documents."
     lines = [
         "_No answer-generation model is configured, so here are the most "
@@ -98,19 +100,25 @@ def render_extractive(docs):
             continue
         seen.add(key)
         lines.append(f"**[{fname} §{section}]**\n\n{d.page_content.strip()}\n")
+    if graph_text:
+        lines.append("\n---\n**Knowledge-graph relationships (traversed):**\n")
+        lines.append("```\n" + graph_text + "\n```")
     return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
 # Claude (provider = "claude")
 # ---------------------------------------------------------------------------
-def generate_claude(user_question, docs):
+def generate_claude(user_question, docs, graph_text=None):
     """Synthesize a grounded, cited answer with Anthropic Claude. Returns the
     full answer text (non-streaming). On error returns an error string so the
-    caller never hangs."""
+    caller never hangs. ``graph_text`` (optional) is relationship context from
+    the knowledge graph, fenced alongside the document passages."""
     import anthropic
 
     context, _sources = build_context(docs)
+    if graph_text:
+        context = f"{context}\n\n{graph_text}"
     system_prompt = f"{SYNTH_SYSTEM}\n\nContext:\n{fence_context(context)}"
     try:
         client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from env
@@ -154,9 +162,13 @@ def _qwen_llm():
     return _QWEN_LLM
 
 
-def generate_qwen(user_question, docs):
-    """Synthesize a grounded answer with the local Qwen SLM. Returns full text."""
+def generate_qwen(user_question, docs, graph_text=None):
+    """Synthesize a grounded answer with the local Qwen SLM. Returns full text.
+    ``graph_text`` (optional) is knowledge-graph relationship context fenced
+    alongside the document passages."""
     context, _sources = build_context(docs)
+    if graph_text:
+        context = f"{context}\n\n{graph_text}"
     system_prompt = (
         f"{SYNTH_SYSTEM}{_QWEN_CITATION_REINFORCE}\n\nContext:\n{fence_context(context)}"
     )
@@ -183,11 +195,12 @@ def generate_qwen(user_question, docs):
 # ---------------------------------------------------------------------------
 # Dispatch
 # ---------------------------------------------------------------------------
-def generate_answer(provider, user_question, docs):
+def generate_answer(provider, user_question, docs, graph_text=None):
     """Generate an answer with the resolved provider. ``provider`` should already
-    be resolved via resolve_provider(). Returns the full answer text."""
+    be resolved via resolve_provider(). ``graph_text`` (optional) is
+    knowledge-graph relationship context. Returns the full answer text."""
     if provider == "claude":
-        return generate_claude(user_question, docs)
+        return generate_claude(user_question, docs, graph_text=graph_text)
     if provider == "qwen":
-        return generate_qwen(user_question, docs)
-    return render_extractive(docs)
+        return generate_qwen(user_question, docs, graph_text=graph_text)
+    return render_extractive(docs, graph_text=graph_text)

@@ -2,8 +2,8 @@
 # telco-delivery-graphrag — Phase 1 RAG baseline dependencies.
 # Reuses the parent ChatBOT project's proven RAG stack (LangChain + Chroma +
 # FastEmbed + Anthropic), trimmed to what the baseline needs. PDF/PPTX/Streamlit
-# are intentionally deferred (synthetic DMC docs are markdown/text). Neo4j driver
-# is included now for Phase 2 but unused by the RAG baseline.
+# are intentionally deferred (synthetic DMC docs are markdown/text). The Phase 2
+# graph layer uses NetworkX (in-process, file-persisted — no server).
 # ===========================================================================
 
 # --- LLM provider (optional at runtime; config.json can select "none") ---
@@ -25,8 +25,14 @@ fastembed
 # Only needed if config.json sets "llm_provider": "qwen". The .gguf is NOT shipped.
 llama-cpp-python
 
-# --- Graph store (Phase 2). Official Neo4j Python driver. Unused by Phase 1. ---
-neo4j
+# --- Graph store (Phase 2). In-process graph via NetworkX — no server, no
+# Docker, persists to a single JSON file. Right-sized for this project's
+# ~100-node knowledge graph. The backend is abstracted in src/graph.py so a
+# server-backed store (e.g. Neo4j) could be swapped in later without touching
+# extraction or retrieval. The Neo4j driver below is kept DORMANT (commented)
+# for that optional future and is NOT required to run the project.
+networkx
+# neo4j   # optional future server-backed backend (not used; see src/graph.py)
 
 # --- Utilities ---
 python-dotenv

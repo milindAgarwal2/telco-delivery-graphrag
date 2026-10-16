@@ -49,15 +49,24 @@ DEFAULTS = {
     "chroma_collection": "telco_delivery",
     "chroma_persist_dir": "./chroma_telco",
     "embedding_model": "BAAI/bge-small-en-v1.5",
-    # --- Graph / Neo4j (Phase 2 — present now so config is stable across phases) ---
-    # NON-secret connection knobs live here; the PASSWORD is a secret and lives
-    # in .env (NEO4J_PASSWORD). "graph_enabled" lets Phase 1 run with the graph
-    # layer entirely off.
+    # --- Graph (Phase 2) ---
+    # The graph layer uses an in-process NetworkX store persisted to a single
+    # JSON file (no server, no Docker). "graph_enabled" lets Phase 1 run with
+    # the graph layer entirely off. "graph_backend" selects the implementation
+    # ("networkx" today); the DORMANT neo4j_* keys below remain so a
+    # server-backed backend could be added later WITHOUT a config migration —
+    # the Neo4j PASSWORD would then come from .env (NEO4J_PASSWORD), never here.
     "graph_enabled": False,
+    "graph_backend": "networkx",
+    "graph_path": "./graph/telco_graph.json",
     "neo4j_uri": "bolt://localhost:7687",
     "neo4j_user": "neo4j",
     "neo4j_database": "neo4j",
 }
+
+# Supported graph backends. "networkx" = in-process, file-persisted (current).
+# "neo4j" is reserved for a future server-backed implementation.
+VALID_GRAPH_BACKENDS = ("networkx", "neo4j")
 
 
 def _clamp_threshold(value, fallback=0.63):
@@ -96,11 +105,16 @@ def _normalize_str(cfg, key):
 
 
 def _normalize_graph(cfg):
-    """Validate graph/Neo4j keys in-place: enabled is a real bool; URI/user/db
-    are non-empty strings (else default). The password is NOT here (it's a
-    secret from .env)."""
+    """Validate graph keys in-place: enabled is a real bool; backend is a known
+    value (else default); graph_path and neo4j_* are non-empty strings (else
+    default). The Neo4j password is NOT here (it's a secret from .env)."""
     cfg["graph_enabled"] = bool(cfg.get("graph_enabled", DEFAULTS["graph_enabled"]))
-    for key in ("neo4j_uri", "neo4j_user", "neo4j_database"):
+    backend = cfg.get("graph_backend")
+    if not isinstance(backend, str) or backend.strip().lower() not in VALID_GRAPH_BACKENDS:
+        cfg["graph_backend"] = DEFAULTS["graph_backend"]
+    else:
+        cfg["graph_backend"] = backend.strip().lower()
+    for key in ("graph_path", "neo4j_uri", "neo4j_user", "neo4j_database"):
         _normalize_str(cfg, key)
 
 
@@ -194,11 +208,15 @@ def get_vectorstore_config():
 
 
 def get_graph_config():
-    """Return the NON-secret graph/Neo4j settings. The password comes from the
-    environment (.env: NEO4J_PASSWORD), never from here."""
+    """Return the NON-secret graph settings. For the NetworkX backend only
+    ``enabled``/``backend``/``path`` are used; the neo4j_* keys are dormant and
+    returned for a future server-backed backend (whose password would come from
+    the environment, .env NEO4J_PASSWORD, never from here)."""
     cfg = load_config()
     return {
         "enabled": cfg["graph_enabled"],
+        "backend": cfg["graph_backend"],
+        "path": cfg["graph_path"],
         "uri": cfg["neo4j_uri"],
         "user": cfg["neo4j_user"],
         "database": cfg["neo4j_database"],
