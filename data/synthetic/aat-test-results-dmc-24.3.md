@@ -31,7 +31,7 @@ control and user plane within 30 seconds of session churn.
 
 ### Recommended fix
 
-Apply the DEF-1203 workaround from the Release Note (avoid warm restart of PCC
+Apply the DEF-1203 workaround from the PCC 7.2.0 release note (avoid warm restart of PCC
 during the upgrade window) and re-run TC-204. Permanent fix is targeted for DMC
 24.4. Until then, TC-204 is a known FOA risk and TC-209 remains blocked.
 

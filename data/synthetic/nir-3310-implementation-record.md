@@ -29,4 +29,4 @@ progression for DMC Release 24.3.
 
 ## References
 
-- Release Note DMC 24.3, MOP-5521, CIQ-8807, AAT report, Defect Register.
+- DMC 24.3 Integration & Compatibility Matrix, per-CNF release notes, MOP-5521, CIQ-8807, AAT report, Defect Register.

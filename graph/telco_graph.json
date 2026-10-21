@@ -62,6 +62,67 @@
       "label": "S1-AP"
     },
     {
+      "id": "RN-cSAEGW-C-24.3.0-cp",
+      "type": "ReleaseNote",
+      "label": "cSAEGW-C 24.3.0-cp release note",
+      "source_doc": "release-note-csaegw-c-24.3.0-cp.md",
+      "doc_type": "ReleaseNote"
+    },
+    {
+      "id": "RN-cSAEGW-U-24.3.0-up",
+      "type": "ReleaseNote",
+      "label": "cSAEGW-U 24.3.0-up release note",
+      "source_doc": "release-note-csaegw-u-24.3.0-up.md",
+      "doc_type": "ReleaseNote"
+    },
+    {
+      "id": "RN-cMME-24.3.1",
+      "type": "ReleaseNote",
+      "label": "cMME 24.3.1 release note",
+      "source_doc": "release-note-cmme-24.3.1.md",
+      "doc_type": "ReleaseNote"
+    },
+    {
+      "id": "RN-PCC-7.2.0",
+      "type": "ReleaseNote",
+      "label": "PCC 7.2.0 release note",
+      "source_doc": "release-note-pcc-7.2.0.md",
+      "doc_type": "ReleaseNote"
+    },
+    {
+      "id": "RN-PCG-7.2.0",
+      "type": "ReleaseNote",
+      "label": "PCG 7.2.0 release note",
+      "source_doc": "release-note-pcg-7.2.0.md",
+      "doc_type": "ReleaseNote"
+    },
+    {
+      "id": "MOP-5521",
+      "type": "Document",
+      "source_doc": "aat-test-results-dmc-24.3.md",
+      "doc_type": "MOP"
+    },
+    {
+      "id": "TC-204",
+      "type": "TestCase",
+      "source_doc": "aat-test-results-dmc-24.3.md"
+    },
+    {
+      "id": "TC-205",
+      "type": "TestCase",
+      "source_doc": "aat-test-results-dmc-24.3.md"
+    },
+    {
+      "id": "DEF-1203",
+      "type": "Defect",
+      "source_doc": "aat-test-results-dmc-24.3.md"
+    },
+    {
+      "id": "ALM-SX-DOWN",
+      "type": "Alarm",
+      "source_doc": "aat-test-results-dmc-24.3.md"
+    },
+    {
       "id": "TC-209",
       "type": "TestCase",
       "source_doc": "aat-test-results-dmc-24.3.md"
@@ -72,30 +133,9 @@
       "source_doc": "aat-test-results-dmc-24.3.md"
     },
     {
-      "id": "MOP-5521",
-      "type": "Document",
-      "source_doc": "aat-test-results-dmc-24.3.md",
-      "doc_type": "MOP"
-    },
-    {
-      "id": "TC-205",
-      "type": "TestCase",
-      "source_doc": "aat-test-results-dmc-24.3.md"
-    },
-    {
-      "id": "ALM-SX-DOWN",
-      "type": "Alarm",
-      "source_doc": "aat-test-results-dmc-24.3.md"
-    },
-    {
-      "id": "DEF-1203",
-      "type": "Defect",
-      "source_doc": "aat-test-results-dmc-24.3.md"
-    },
-    {
-      "id": "TC-204",
-      "type": "TestCase",
-      "source_doc": "aat-test-results-dmc-24.3.md"
+      "id": "7.2.0",
+      "type": "SoftwareVersion",
+      "label": "7.2.0"
     },
     {
       "id": "24.3.0-cp",
@@ -103,9 +143,10 @@
       "label": "24.3.0-cp"
     },
     {
-      "id": "DEF-1250",
-      "type": "Defect",
-      "source_doc": "alarm-catalog-packet-core.md"
+      "id": "RUN-77",
+      "type": "Document",
+      "source_doc": "alarm-catalog-packet-core.md",
+      "doc_type": "Runbook"
     },
     {
       "id": "ALM-S1AP-TIMER",
@@ -118,10 +159,9 @@
       "source_doc": "alarm-catalog-packet-core.md"
     },
     {
-      "id": "RUN-77",
-      "type": "Document",
-      "source_doc": "alarm-catalog-packet-core.md",
-      "doc_type": "Runbook"
+      "id": "DEF-1250",
+      "type": "Defect",
+      "source_doc": "alarm-catalog-packet-core.md"
     },
     {
       "id": "24.3.1",
@@ -135,11 +175,6 @@
       "doc_type": "CIQ"
     },
     {
-      "id": "7.2.0",
-      "type": "SoftwareVersion",
-      "label": "7.2.0"
-    },
-    {
       "id": "DEF-1187",
       "type": "Defect",
       "source_doc": "defect-register-dmc-24.3.md"
@@ -147,7 +182,7 @@
     {
       "id": "NIR-3310",
       "type": "Document",
-      "source_doc": "nir-3310-implementation-record.md",
+      "source_doc": "dmc-24.3-integration-matrix.md",
       "doc_type": "NIR"
     },
     {
@@ -164,33 +199,57 @@
   "edges": [
     {
       "src": "DMC-24.3",
+      "rel": "includes",
+      "dst": "24.3.0-cp",
+      "source_doc": "dmc-24.3-integration-matrix.md"
+    },
+    {
+      "src": "DMC-24.3",
+      "rel": "includes",
+      "dst": "24.3.0-up",
+      "source_doc": "dmc-24.3-integration-matrix.md"
+    },
+    {
+      "src": "DMC-24.3",
+      "rel": "includes",
+      "dst": "24.3.1",
+      "source_doc": "dmc-24.3-integration-matrix.md"
+    },
+    {
+      "src": "DMC-24.3",
+      "rel": "includes",
+      "dst": "7.2.0",
+      "source_doc": "dmc-24.3-integration-matrix.md"
+    },
+    {
+      "src": "DMC-24.3",
       "rel": "requires",
       "dst": "MOP-5521",
-      "source_doc": "release-note-dmc-24.3.md"
+      "source_doc": "dmc-24.3-integration-matrix.md"
     },
     {
       "src": "DMC-24.3",
       "rel": "requires",
       "dst": "CIQ-8807",
-      "source_doc": "release-note-dmc-24.3.md"
+      "source_doc": "dmc-24.3-integration-matrix.md"
     },
     {
       "src": "DMC-24.3",
       "rel": "requires",
       "dst": "NIR-3310",
-      "source_doc": "release-note-dmc-24.3.md"
+      "source_doc": "dmc-24.3-integration-matrix.md"
     },
     {
       "src": "ECDS-7.2",
       "rel": "supports",
       "dst": "DMC-24.3",
-      "source_doc": "release-note-dmc-24.3.md"
+      "source_doc": "dmc-24.3-integration-matrix.md"
     },
     {
       "src": "cSAEGW-C",
       "rel": "runs",
       "dst": "24.3.0-cp",
-      "source_doc": "release-note-dmc-24.3.md"
+      "source_doc": "release-note-csaegw-c-24.3.0-cp.md"
     },
     {
       "src": "cSAEGW-C",
@@ -202,7 +261,7 @@
       "src": "cSAEGW-U",
       "rel": "runs",
       "dst": "24.3.0-up",
-      "source_doc": "release-note-dmc-24.3.md"
+      "source_doc": "release-note-csaegw-u-24.3.0-up.md"
     },
     {
       "src": "cSAEGW-U",
@@ -214,7 +273,7 @@
       "src": "cMME",
       "rel": "runs",
       "dst": "24.3.1",
-      "source_doc": "release-note-dmc-24.3.md"
+      "source_doc": "release-note-cmme-24.3.1.md"
     },
     {
       "src": "cMME",
@@ -226,7 +285,7 @@
       "src": "PCC",
       "rel": "runs",
       "dst": "7.2.0",
-      "source_doc": "release-note-dmc-24.3.md"
+      "source_doc": "release-note-pcc-7.2.0.md"
     },
     {
       "src": "PCC",
@@ -238,7 +297,7 @@
       "src": "PCG",
       "rel": "runs",
       "dst": "7.2.0",
-      "source_doc": "release-note-dmc-24.3.md"
+      "source_doc": "release-note-pcg-7.2.0.md"
     },
     {
       "src": "PCG",
@@ -277,28 +336,82 @@
       "source_doc": "hld-packet-core-24.x.md"
     },
     {
-      "src": "TC-209",
-      "rel": "validates",
-      "dst": "PCC",
-      "source_doc": "test-case-catalog-dmc-24.3.md"
+      "src": "RN-cSAEGW-C-24.3.0-cp",
+      "rel": "documents",
+      "dst": "cSAEGW-C",
+      "source_doc": "release-note-csaegw-c-24.3.0-cp.md"
     },
     {
-      "src": "TC-209",
-      "rel": "blocked_by",
-      "dst": "DEF-1203",
-      "source_doc": "aat-test-results-dmc-24.3.md"
+      "src": "RN-cSAEGW-C-24.3.0-cp",
+      "rel": "documents",
+      "dst": "24.3.0-cp",
+      "source_doc": "release-note-csaegw-c-24.3.0-cp.md"
     },
     {
-      "src": "TC-311",
-      "rel": "validates",
+      "src": "RN-cSAEGW-C-24.3.0-cp",
+      "rel": "reports",
+      "dst": "DEF-1187",
+      "source_doc": "release-note-csaegw-c-24.3.0-cp.md"
+    },
+    {
+      "src": "RN-cSAEGW-U-24.3.0-up",
+      "rel": "documents",
+      "dst": "cSAEGW-U",
+      "source_doc": "release-note-csaegw-u-24.3.0-up.md"
+    },
+    {
+      "src": "RN-cSAEGW-U-24.3.0-up",
+      "rel": "documents",
+      "dst": "24.3.0-up",
+      "source_doc": "release-note-csaegw-u-24.3.0-up.md"
+    },
+    {
+      "src": "RN-cMME-24.3.1",
+      "rel": "documents",
       "dst": "cMME",
-      "source_doc": "test-case-catalog-dmc-24.3.md"
+      "source_doc": "release-note-cmme-24.3.1.md"
     },
     {
-      "src": "TC-311",
-      "rel": "validates",
-      "dst": "S1-AP",
-      "source_doc": "test-case-catalog-dmc-24.3.md"
+      "src": "RN-cMME-24.3.1",
+      "rel": "documents",
+      "dst": "24.3.1",
+      "source_doc": "release-note-cmme-24.3.1.md"
+    },
+    {
+      "src": "RN-cMME-24.3.1",
+      "rel": "reports",
+      "dst": "DEF-1250",
+      "source_doc": "release-note-cmme-24.3.1.md"
+    },
+    {
+      "src": "RN-PCC-7.2.0",
+      "rel": "documents",
+      "dst": "PCC",
+      "source_doc": "release-note-pcc-7.2.0.md"
+    },
+    {
+      "src": "RN-PCC-7.2.0",
+      "rel": "documents",
+      "dst": "7.2.0",
+      "source_doc": "release-note-pcc-7.2.0.md"
+    },
+    {
+      "src": "RN-PCC-7.2.0",
+      "rel": "reports",
+      "dst": "DEF-1203",
+      "source_doc": "release-note-pcc-7.2.0.md"
+    },
+    {
+      "src": "RN-PCG-7.2.0",
+      "rel": "documents",
+      "dst": "PCG",
+      "source_doc": "release-note-pcg-7.2.0.md"
+    },
+    {
+      "src": "RN-PCG-7.2.0",
+      "rel": "documents",
+      "dst": "7.2.0",
+      "source_doc": "release-note-pcg-7.2.0.md"
     },
     {
       "src": "MOP-5521",
@@ -311,48 +424,6 @@
       "rel": "applies_version",
       "dst": "24.3.0-cp",
       "source_doc": "mop-5521-upgrade-csaegw-c.md"
-    },
-    {
-      "src": "TC-205",
-      "rel": "validates",
-      "dst": "cSAEGW-C",
-      "source_doc": "test-case-catalog-dmc-24.3.md"
-    },
-    {
-      "src": "TC-205",
-      "rel": "validates",
-      "dst": "MOP-5521",
-      "source_doc": "test-case-catalog-dmc-24.3.md"
-    },
-    {
-      "src": "ALM-SX-DOWN",
-      "rel": "observed_on",
-      "dst": "cSAEGW-C",
-      "source_doc": "alarm-catalog-packet-core.md"
-    },
-    {
-      "src": "ALM-SX-DOWN",
-      "rel": "monitors",
-      "dst": "Sx",
-      "source_doc": "alarm-catalog-packet-core.md"
-    },
-    {
-      "src": "DEF-1203",
-      "rel": "affects",
-      "dst": "PCC",
-      "source_doc": "defect-register-dmc-24.3.md"
-    },
-    {
-      "src": "DEF-1203",
-      "rel": "observed_alarm",
-      "dst": "ALM-SX-DOWN",
-      "source_doc": "defect-register-dmc-24.3.md"
-    },
-    {
-      "src": "DEF-1203",
-      "rel": "fixed_in_release",
-      "dst": "DMC-24.4",
-      "source_doc": "defect-register-dmc-24.3.md"
     },
     {
       "src": "TC-204",
@@ -391,28 +462,88 @@
       "source_doc": "aat-test-results-dmc-24.3.md"
     },
     {
-      "src": "DEF-1250",
-      "rel": "fixed_in",
-      "dst": "24.3.1",
+      "src": "TC-205",
+      "rel": "validates",
+      "dst": "cSAEGW-C",
+      "source_doc": "test-case-catalog-dmc-24.3.md"
+    },
+    {
+      "src": "TC-205",
+      "rel": "validates",
+      "dst": "MOP-5521",
+      "source_doc": "test-case-catalog-dmc-24.3.md"
+    },
+    {
+      "src": "DEF-1203",
+      "rel": "affects",
+      "dst": "PCC",
       "source_doc": "defect-register-dmc-24.3.md"
     },
     {
-      "src": "DEF-1250",
-      "rel": "validated_by",
-      "dst": "TC-311",
+      "src": "DEF-1203",
+      "rel": "observed_alarm",
+      "dst": "ALM-SX-DOWN",
       "source_doc": "defect-register-dmc-24.3.md"
     },
     {
-      "src": "ALM-S1AP-TIMER",
+      "src": "DEF-1203",
+      "rel": "fixed_in_release",
+      "dst": "DMC-24.4",
+      "source_doc": "defect-register-dmc-24.3.md"
+    },
+    {
+      "src": "ALM-SX-DOWN",
       "rel": "observed_on",
-      "dst": "cMME",
+      "dst": "cSAEGW-C",
       "source_doc": "alarm-catalog-packet-core.md"
     },
     {
-      "src": "ALM-S1AP-TIMER",
+      "src": "ALM-SX-DOWN",
       "rel": "monitors",
-      "dst": "S1-AP",
+      "dst": "Sx",
       "source_doc": "alarm-catalog-packet-core.md"
+    },
+    {
+      "src": "TC-209",
+      "rel": "validates",
+      "dst": "PCC",
+      "source_doc": "test-case-catalog-dmc-24.3.md"
+    },
+    {
+      "src": "TC-209",
+      "rel": "blocked_by",
+      "dst": "DEF-1203",
+      "source_doc": "aat-test-results-dmc-24.3.md"
+    },
+    {
+      "src": "TC-311",
+      "rel": "validates",
+      "dst": "cMME",
+      "source_doc": "test-case-catalog-dmc-24.3.md"
+    },
+    {
+      "src": "TC-311",
+      "rel": "validates",
+      "dst": "S1-AP",
+      "source_doc": "test-case-catalog-dmc-24.3.md"
+    },
+    {
+      "src": "24.3.0-cp",
+      "rel": "certified_with",
+      "dst": "24.3.0-up",
+      "source_doc": "dmc-24.3-integration-matrix.md"
+    },
+    {
+      "src": "24.3.0-cp",
+      "rel": "certified_with",
+      "dst": "7.2.0",
+      "source_doc": "dmc-24.3-integration-matrix.md"
+    },
+    {
+      "src": "24.3.0-cp",
+      "rel": "requires_min_version",
+      "dst": "7.2.0",
+      "source_doc": "dmc-24.3-integration-matrix.md"
     },
     {
       "src": "RUN-77",
@@ -437,6 +568,36 @@
       "rel": "references",
       "dst": "MOP-5521",
       "source_doc": "runbook-77-sx-event-parity.md"
+    },
+    {
+      "src": "ALM-S1AP-TIMER",
+      "rel": "observed_on",
+      "dst": "cMME",
+      "source_doc": "alarm-catalog-packet-core.md"
+    },
+    {
+      "src": "ALM-S1AP-TIMER",
+      "rel": "monitors",
+      "dst": "S1-AP",
+      "source_doc": "alarm-catalog-packet-core.md"
+    },
+    {
+      "src": "ALM-PCG-CHG",
+      "rel": "observed_on",
+      "dst": "PCG",
+      "source_doc": "alarm-catalog-packet-core.md"
+    },
+    {
+      "src": "DEF-1250",
+      "rel": "fixed_in",
+      "dst": "24.3.1",
+      "source_doc": "defect-register-dmc-24.3.md"
+    },
+    {
+      "src": "DEF-1250",
+      "rel": "validated_by",
+      "dst": "TC-311",
+      "source_doc": "defect-register-dmc-24.3.md"
     },
     {
       "src": "CIQ-8807",

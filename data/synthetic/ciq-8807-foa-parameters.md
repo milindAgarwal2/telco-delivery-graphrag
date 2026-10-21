@@ -20,7 +20,7 @@ Release 24.3. It **describes** the configuration consumed by MOP-5521.
 
 ## Dependencies
 
-- Requires software versions from Release Note DMC 24.3.
+- Requires the certified software versions from the DMC 24.3 Integration & Compatibility Matrix.
 - cSAEGW-C must be at 24.3.0-cp (see MOP-5521).
 - FOA is **gated_by** lab acceptance results.
 

@@ -37,6 +37,7 @@ _TYPE_COLORS = {
     "Defect": "#FF5630",          # red
     "Alarm": "#FF8B00",           # orange
     "Document": "#6554C0",        # purple
+    "ReleaseNote": "#8B5CF6",     # light purple (per-CNF release notes)
     "NetworkFunction": "#36B37E",  # green
     "SoftwareVersion": "#00B8D9",  # teal
     "Environment": "#FFC400",     # amber
