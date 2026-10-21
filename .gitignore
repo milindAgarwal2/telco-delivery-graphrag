@@ -31,6 +31,11 @@ graph/export/
 chroma_*/
 *.sqlite3
 
+# pyvis GUI artifacts — vendored vis-network/tom-select assets that pyvis writes
+# to the working dir at runtime (regenerated on each render; not source).
+lib/
+pyvis_*.html
+
 # Large session/handoff dumps — not for the repo
 handoff-session.json
 *handoff-session.json

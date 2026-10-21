@@ -37,3 +37,9 @@ networkx
 # --- Utilities ---
 python-dotenv
 requests
+
+# --- GUI (optional front-end). Browser-based Q&A + Impact Explorer over the
+# existing UI-free src.rag / src.graph modules. Run: streamlit run app.py ---
+streamlit
+# Interactive knowledge-graph visualization in the Impact Explorer tab.
+pyvis

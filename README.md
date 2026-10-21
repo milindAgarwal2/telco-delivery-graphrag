@@ -105,9 +105,50 @@ Document       ──describes──>       Configuration
 
 ---
 
+## Running it
+
+### One-time setup
+
+```bash
+python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
+./.venv/bin/python -m src.ingest     # embed data/synthetic/ into Chroma (~55 chunks)
+./.venv/bin/python -m src.extract    # build the knowledge graph (~31 nodes, ~48 edges)
+```
+
+### GUI (no Python needed to use it) — recommended
+
+A browser-based front-end with two tabs: **Ask a question** (Q&A with a provider
+selector, a *Use knowledge graph* toggle, and answer + sources + confidence) and
+**Impact Explorer** (pick an entity like `TC-204` and see what it connects to
+across the delivery lifecycle — the dependency/impact traversal plain search
+can't do).
+
+```bash
+./.venv/bin/streamlit run app.py
+```
+
+Then open the URL it prints (default <http://localhost:8501>). The GUI is a thin
+layer over the core modules — it changes nothing in `src/`.
+
+### CLI
+
+```bash
+./.venv/bin/python -m src.rag --graph "Which test cases and documents are impacted by the cSAEGW-C upgrade, and what blocks FOA readiness?"
+./.venv/bin/python -m src.rag --no-graph "Why did the acceptance test fail after the cSAEGW-C upgrade?"
+./.venv/bin/python -m src.graph_retrieval TC-204    # impact report for any entity
+```
+
+By default the answerer uses the extractive provider (no API key needed). Set
+`llm_provider` in `config.json` to `claude` (needs `ANTHROPIC_API_KEY` in `.env`)
+or `qwen` (needs a local GGUF) for synthesized prose.
+
 ## Status
 
-🚧 Scaffolding. Nothing functional yet — this README is the charter.
+✅ **Phase 1 (RAG baseline)** and **Phase 2 (NetworkX knowledge graph +
+graph-augmented retrieval)** are complete, plus a **Streamlit GUI**. The graph
+uses in-process NetworkX (no server/Docker), persisted to `graph/telco_graph.json`.
+Backlog: RAG-vs-graph eval harness, per-CNF release-note modeling, and real-data
+ingestion (PDF/XLSX + PII scrubbing).
 
 ## License
 
