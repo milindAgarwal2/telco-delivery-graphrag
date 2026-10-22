@@ -43,3 +43,6 @@ requests
 streamlit
 # Interactive knowledge-graph visualization in the Impact Explorer tab.
 pyvis
+
+# --- Dev / test ---
+pytest

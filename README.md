@@ -142,14 +142,40 @@ By default the answerer uses the extractive provider (no API key needed). Set
 `llm_provider` in `config.json` to `claude` (needs `ANTHROPIC_API_KEY` in `.env`)
 or `qwen` (needs a local GGUF) for synthesized prose.
 
+### Tests
+
+```bash
+./.venv/bin/pip install pytest
+./.venv/bin/pytest -q
+```
+
+Fast smoke tests cover module imports, graph construction from the synthetic
+corpus, the anchor dependency chain, per-CNF provenance, and JSON round-trip.
+
+## Docs
+
+- [`docs/FEATURE-OVERVIEW.md`](docs/FEATURE-OVERVIEW.md) — what the project does
+  and how the pattern relates to autonomous-network goals.
+- [`docs/DOCUMENT-INVENTORY.md`](docs/DOCUMENT-INVENTORY.md) — the synthetic
+  documents and their real-world equivalents.
+
 ## Status
 
-✅ **Phase 1 (RAG baseline)** and **Phase 2 (NetworkX knowledge graph +
-graph-augmented retrieval)** are complete, plus a **Streamlit GUI**. The graph
-uses in-process NetworkX (no server/Docker), persisted to `graph/telco_graph.json`.
-Backlog: RAG-vs-graph eval harness, per-CNF release-note modeling, and real-data
-ingestion (PDF/XLSX + PII scrubbing).
+✅ **Phase 1 (RAG baseline)**, **Phase 2 (NetworkX knowledge graph +
+graph-augmented retrieval)**, a **Streamlit GUI with interactive graph
+visualization**, and **per-CNF release-note modeling** are all complete. The
+graph uses in-process NetworkX (no server/Docker), persisted to
+`graph/telco_graph.json`.
+
+Backlog: a RAG-vs-graph evaluation harness and real-data ingestion
+(PDF/XLSX + PII scrubbing).
+
+## Contributing
+
+Contributions and ideas are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+The one hard rule: **synthetic data only** (never commit real customer,
+subscriber, node, or confidential information).
 
 ## License
 
-MIT (to be added) — learning/portfolio project.
+[MIT](LICENSE) — a learning / portfolio project.
