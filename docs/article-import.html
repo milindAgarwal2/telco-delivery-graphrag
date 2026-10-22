@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>When RAG isn’t enough: a GraphRAG copilot for telecom network delivery</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">When RAG isn’t enough: a GraphRAG copilot for telecom
+network delivery</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#when-rag-isnt-enough-a-graphrag-copilot-for-telecom-network-delivery"
+id="toc-when-rag-isnt-enough-a-graphrag-copilot-for-telecom-network-delivery">When
+RAG isn’t enough: a GraphRAG copilot for telecom network delivery</a>
+<ul>
+<li><a href="#the-problem-this-solves"
+id="toc-the-problem-this-solves">The problem this solves</a></li>
+<li><a href="#the-big-picture-how-it-works-in-two-layers"
+id="toc-the-big-picture-how-it-works-in-two-layers">The big picture (how
+it works in two layers)</a></li>
+<li><a href="#why-a-graph-and-why-not-just-a-bigger-rag"
+id="toc-why-a-graph-and-why-not-just-a-bigger-rag">Why a graph, and why
+not just a bigger RAG</a></li>
+<li><a href="#modeling-reality-release-notes-are-pernetwork-function"
+id="toc-modeling-reality-release-notes-are-pernetwork-function">Modeling
+reality: release notes are per–network-function</a></li>
+<li><a href="#the-anchor-demo-a-failed-acceptance-test-after-an-upgrade"
+id="toc-the-anchor-demo-a-failed-acceptance-test-after-an-upgrade">The
+anchor demo: a failed acceptance test after an upgrade</a></li>
+<li><a href="#the-impact-explorer-seeing-the-graph"
+id="toc-the-impact-explorer-seeing-the-graph">The Impact Explorer:
+seeing the graph</a></li>
+<li><a href="#a-word-on-the-extractor-deterministic-on-purpose"
+id="toc-a-word-on-the-extractor-deterministic-on-purpose">A word on the
+extractor (deterministic, on purpose)</a></li>
+<li><a href="#running-it" id="toc-running-it">Running it</a></li>
+<li><a href="#honest-limitations-the-questions-a-sharp-reader-will-ask"
+id="toc-honest-limitations-the-questions-a-sharp-reader-will-ask">Honest
+limitations (the questions a sharp reader will ask)</a></li>
+<li><a href="#where-this-fits-the-autonomous-network-angle"
+id="toc-where-this-fits-the-autonomous-network-angle">Where this fits:
+the autonomous-network angle</a></li>
+<li><a href="#toolset" id="toc-toolset">Toolset</a></li>
+<li><a href="#closing-thought" id="toc-closing-thought">Closing
+thought</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="when-rag-isnt-enough-a-graphrag-copilot-for-telecom-network-delivery">When
+RAG isn’t enough: a GraphRAG copilot for telecom network delivery</h1>
+<p><em>By Milind Agarwal · ~12 min read</em></p>
+<blockquote>
+<p><strong>What this is.</strong> A learning project that explores
+<strong>GraphRAG</strong> — knowledge-graph–augmented retrieval — over
+the delivery lifecycle of a cloud-native 5G packet core. It started as a
+plain document-RAG chatbot I’d built earlier, and grew a knowledge-graph
+layer on top to answer the <em>relationship</em> questions that plain
+retrieval quietly fails at. Everything here runs on <strong>synthetic,
+sanitized data</strong> — invented releases, network functions, test
+cases, and defects that resemble real delivery artifacts in
+<em>shape</em> but contain nothing real. The code is open source
+(MIT).</p>
+</blockquote>
+<hr />
+<h2 id="the-problem-this-solves">The problem this solves</h2>
+<p>In telecom network delivery, the work lives across a pile of
+disconnected documents: per–network-function release notes, Methods of
+Procedure (MOPs), Customer Information Questionnaires (CIQs), test-case
+catalogs, acceptance-test results, defect registers, alarm dictionaries,
+troubleshooting runbooks, implementation records. Any single document is
+easy to search. The questions that actually matter in delivery are the
+ones that <strong>span many of them at once</strong>:</p>
+<blockquote>
+<p><em>“If we upgrade this network function, which test cases break,
+what’s blocking go-live, and what’s the evidence?”</em></p>
+</blockquote>
+<p>That is not a retrieval question. It’s a
+<strong>relationship</strong> question. And that distinction is the
+whole reason this project exists.</p>
+<p>A plain Retrieval-Augmented Generation (RAG) pipeline answers
+<em>“what does this document say?”</em> beautifully — it embeds chunks
+of text, finds the ones most similar to your question, and hands them to
+a language model. But “what is <em>affected</em> if I change X?” has no
+good answer in any single chunk of text. The answer lives in the
+<strong>connections</strong> between artifacts: a test is <em>blocked
+by</em> a defect, which was <em>reported in</em> a release note, which
+<em>documents</em> a network function, which is <em>deployed on</em> an
+environment that <em>gates</em> go-live. Plain RAG has no notion of
+those edges. It can only return paragraphs that happen to look like your
+question.</p>
+<p>So I built the thing that does: a knowledge graph, sitting next to
+the vector store, that makes those relationships explicit and
+traversable.</p>
+<hr />
+<h2 id="the-big-picture-how-it-works-in-two-layers">The big picture (how
+it works in two layers)</h2>
+<p>The system has two retrieval layers over the same synthetic corpus,
+and the interesting part is how they combine:</p>
+<ol type="1">
+<li><p><strong>Vector RAG (the baseline).</strong> Documents are
+chunked, embedded locally, and stored in a vector database. A question
+retrieves the most relevant passages and — optionally — a language model
+synthesizes a grounded, cited answer from them. This is the “what does
+it say?” layer.</p></li>
+<li><p><strong>A knowledge graph (the differentiator).</strong> The same
+corpus is parsed into a typed graph: <strong>nodes</strong> are entities
+(test cases, defects, alarms, network functions, software versions,
+release notes, environments, documents) and <strong>edges</strong> are
+the relationships between them (<code>validates</code>,
+<code>blocked_by</code>, <code>fixed_in</code>, <code>reports</code>,
+<code>documents</code>, <code>certified_with</code>, <code>gates</code>,
+<code>precedes</code>, …). This is the “what’s connected to what?”
+layer.</p></li>
+</ol>
+<p>When you ask a question, the system detects which graph entities you
+mentioned (by ID like <code>TC-204</code>, or by name like a network
+function), <strong>traverses outward</strong> from them to pull in the
+connected neighborhood, and feeds that relationship context to the
+answerer <em>alongside</em> the vector passages — each edge carrying the
+source document it came from, so the graph is just as citable as the
+text.</p>
+<p>The result: the answer to <em>“what’s impacted by this upgrade and
+what blocks go-live?”</em> is assembled by walking the graph, not by
+hoping one paragraph happened to state the whole chain.</p>
+<hr />
+<h2 id="why-a-graph-and-why-not-just-a-bigger-rag">Why a graph, and why
+not just a bigger RAG</h2>
+<p>It’s a fair challenge: couldn’t you just retrieve more chunks, or
+write the dependencies into one big document, and let RAG find it? You
+can — and it’s brittle. You’d be pre-computing every answer by hand and
+hoping the phrasing matches. The moment someone asks about a path you
+didn’t spell out in prose, RAG is blind to it.</p>
+<p>A graph flips that. You state the <em>facts</em> once as edges
+(<code>TC-204 blocked_by DEF-1203</code>,
+<code>DEF-1203 reported_in release-note-pcc</code>), and then
+<strong>any</strong> traversal question — one hop, three hops, upstream,
+downstream — is answerable without having written that specific answer
+anywhere. Impact analysis, dependency tracing, “what else touches this”
+— these are graph-shaped problems, and a graph solves a whole
+<em>class</em> of them at once.</p>
+<p>I deliberately built it in two phases so the value of the graph is
+<em>demonstrated, not assumed</em>: first the RAG baseline, then the
+graph layer on top, with a toggle to turn the graph off and compare the
+two answers side by side on the same question.</p>
+<hr />
+<h2 id="modeling-reality-release-notes-are-pernetwork-function">Modeling
+reality: release notes are per–network-function</h2>
+<p>One modeling decision is worth calling out, because it’s where the
+synthetic data stopped being a toy and started reflecting how delivery
+actually works.</p>
+<p>My first cut had a single, tidy “release note” listing every network
+function and its version in one table. Convenient — and wrong. In
+reality, each network function ships its <strong>own</strong> release
+note, on its <strong>own</strong> version cadence, often from a
+different vendor team. The “release” as a whole is not a source document
+at all; it’s an <strong>integration view</strong> that a delivery team
+<em>assembles</em> on top of many individual notes — essentially a
+compatibility matrix saying “these specific versions are certified to
+run together.”</p>
+<p>So I split the corpus accordingly: one release note per network
+function, plus a separate integration/compatibility matrix. In the
+graph, the release became a <em>derived</em> node that
+<code>includes</code> each certified <code>(function, version)</code>
+pair, with <code>certified_with</code> and
+<code>requires_min_version</code> edges between versions — each sourced
+from the right per-function note.</p>
+<p>This isn’t cosmetic. It unlocks a question class that was literally
+impossible before: <em>“does this control-plane version require a
+minimum version of the policy component?”</em> is a cross-document,
+cross-function compatibility question that no single release note
+answers — but the graph (or the matrix it models) does. The graph is,
+quite literally, doing the integration work a human does by hand
+today.</p>
+<hr />
+<h2 id="the-anchor-demo-a-failed-acceptance-test-after-an-upgrade">The
+anchor demo: a failed acceptance test after an upgrade</h2>
+<p>Every demo needs one story told end-to-end. Mine is a failure
+chain:</p>
+<p>An acceptance test (<code>TC-204</code>, event-parity on an
+interface) <strong>fails</strong> after a control-plane network function
+is upgraded. Why? The graph traces it:</p>
+<ul>
+<li><code>TC-204</code> is <code>blocked_by</code> defect
+<code>DEF-1203</code> (a counter reset on warm restart),</li>
+<li><code>DEF-1203</code> <code>reported_in</code> the policy
+component’s release note and <code>raised</code> an alarm
+(<code>ALM-SX-DOWN</code>),</li>
+<li><code>TC-204</code> <code>gates</code> the go-live environment,
+which <code>precedes</code> production —</li>
+<li>so the failure doesn’t just fail a test; it <strong>holds the whole
+rollout</strong>, and the recommended fix (a documented workaround +
+re-run) is reachable through a troubleshooting runbook that
+<code>references</code> the same defect and MOP.</li>
+</ul>
+<p>Ask that question with the graph off, and you get relevant passages —
+useful, but you have to connect the dots yourself. Ask it with the graph
+on, and the dependency chain comes back assembled, with a citation on
+every link.</p>
+<hr />
+<h2 id="the-impact-explorer-seeing-the-graph">The Impact Explorer:
+seeing the graph</h2>
+<p>Answers are one thing; <em>exploration</em> is another. The browser
+GUI has a second tab — an <strong>Impact Explorer</strong> — that is
+pure graph, no language model involved. You pick any entity (a test
+case, a defect, a network function, a release note), choose how many
+hops to traverse, and it renders the connected neighborhood as an
+<strong>interactive node-and-edge diagram</strong>: nodes colored by
+type, the selected entity highlighted, edges labeled with the
+relationship, draggable and hoverable.</p>
+<p>This is the single clearest one-screen answer to “why GraphRAG and
+not just RAG?” — a reviewer picks an entity and immediately
+<em>sees</em> the slice of the delivery lifecycle connected to it, which
+plain document search would never assemble.</p>
+<hr />
+<h2 id="a-word-on-the-extractor-deterministic-on-purpose">A word on the
+extractor (deterministic, on purpose)</h2>
+<p>For this synthetic corpus the entity/relationship extraction is
+<strong>rule-based</strong>, not LLM-driven: a small set of ID patterns
+plus a curated, auditable table of relationships, each carrying the
+document it came from. For a clean, invented corpus that’s the right
+call — it’s reproducible, needs no API key, and is 100% faithful to the
+text. Crucially, the graph layer’s <em>value</em> (traversal, impact
+analysis) is independent of <em>how</em> the graph was populated. So for
+messy real-world data later, an LLM-assisted extractor can slot in
+behind the exact same graph interface without touching retrieval or the
+UI.</p>
+<hr />
+<h2 id="running-it">Running it</h2>
+<p>The whole thing is self-contained and local — no server, no Docker,
+no cloud required to try it.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv <span class="kw">&amp;&amp;</span> <span class="ex">./.venv/bin/pip</span> install <span class="at">-r</span> requirements.txt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./.venv/bin/python</span> <span class="at">-m</span> src.ingest     <span class="co"># embed the synthetic corpus into the vector store</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./.venv/bin/python</span> <span class="at">-m</span> src.extract    <span class="co"># build the knowledge graph (~36 nodes, ~69 edges)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./.venv/bin/streamlit</span> run app.py     <span class="co"># browser GUI: Ask a question + Impact Explorer</span></span></code></pre></div>
+<p>By default the answerer runs in <em>extractive</em> mode — it shows
+the retrieved passages and the traversed graph relationships with no
+language model at all, so it works with zero API keys. Point it at a
+cloud model or a local small model for synthesized prose instead; the
+provider is a one-line config switch.</p>
+<hr />
+<h2 id="honest-limitations-the-questions-a-sharp-reader-will-ask">Honest
+limitations (the questions a sharp reader will ask)</h2>
+<ul>
+<li><strong>The data is synthetic.</strong> It’s designed around one
+clean anchor story so the relationships are tidy. Real delivery data is
+messier — inconsistent naming, missing links, contradictory records.
+Proving the graph adds value on clean data first is deliberate;
+hardening it for real data is a separate job.</li>
+<li><strong>The extractor is tuned to the corpus vocabulary.</strong>
+Rule-based extraction is faithful but not general; real data needs an
+LLM-assisted extractor (the interface is already built to accept
+one).</li>
+<li><strong>Ingestion handles text formats only today.</strong> Real
+artifacts arrive as PDF, Word, and Excel (CIQs are notoriously
+spreadsheets). PDF/XLSX ingestion plus a PII-scrubbing pass are the main
+gaps before real data could flow in — and real data would stay strictly
+local, never in the shareable repo.</li>
+<li><strong>The graph is small and in-process.</strong> It uses an
+in-memory graph persisted to a single JSON file — right-sized for ~100
+nodes. A server-backed graph store could be swapped in behind the same
+interface if it ever needed to scale; the config hooks for that are
+already present but dormant.</li>
+</ul>
+<hr />
+<h2 id="where-this-fits-the-autonomous-network-angle">Where this fits:
+the autonomous-network angle</h2>
+<p>The telecom industry’s push toward <strong>autonomous
+networks</strong> is about intent-driven, closed-loop operations — and
+reaching higher levels of autonomy depends on machines being able to
+<strong>reason over relationships</strong> between network state,
+changes, tests, faults, and knowledge, not just store documents. This
+project is a small, concrete demonstration of that reasoning pattern on
+the delivery and assurance side: a connected knowledge substrate, plus
+explainable, cited answers. The anchor flow — change → failed test →
+root-cause defect → recommended fix with evidence — is exactly the
+<em>observe → analyze → decide</em> portion of a closed loop, applied to
+acceptance and go-live readiness.</p>
+<hr />
+<h2 id="toolset">Toolset</h2>
+<ul>
+<li><strong>Knowledge graph:</strong> an in-process graph library
+(file-persisted; no server) — right-sized for the problem, with a
+backend-agnostic interface so a server-backed store could replace it
+later.</li>
+<li><strong>Vector search:</strong> a local vector database with local,
+offline embeddings (ONNX, no GPU, no PyTorch).</li>
+<li><strong>Answer engine:</strong> pluggable — a cloud model, a local
+small model, or an extractive no-model fallback that always works.</li>
+<li><strong>Extraction:</strong> deterministic, rule-based,
+provenance-carrying (swap in an LLM extractor for real data).</li>
+<li><strong>UI:</strong> a browser app with a Q&amp;A tab and an
+interactive graph-visualization Impact Explorer.</li>
+<li><strong>Language:</strong> Python. <strong>License:</strong>
+MIT.</li>
+</ul>
+<hr />
+<h2 id="closing-thought">Closing thought</h2>
+<p>Plain RAG is a genuinely great hammer — but not every question is a
+nail. The questions that keep delivery teams up at night are about
+<em>consequences</em>: if I touch this, what else moves? Those are graph
+questions. Building the graph layer turned a document search tool into
+something that can actually trace a failure from an upgrade all the way
+to a held production rollout, and show its work at every step. That’s
+the difference between a chatbot that <em>finds</em> text and one that
+can <em>reason</em> about a delivery program.</p>
+<p><em>Code and synthetic data: open source (MIT). Built on personal
+time, with invented data, for learning and demonstration.</em></p>
+</body>
+</html>
