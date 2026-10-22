@@ -3,7 +3,7 @@
 Extracted from the parent ChatBOT project's ``chatBOT_engine.py`` (the UI-free
 retrieval core), adapted to:
   - read vector-store settings from config.json (via get_vectorstore_config)
-  - use the DMC corpus metadata shape (file_name + section, no page numbers)
+  - use the CNPD corpus metadata shape (file_name + section, no page numbers)
 
 Provides:
   - retrieve_docs(question)        -> MMR retrieval (relevant + diverse)

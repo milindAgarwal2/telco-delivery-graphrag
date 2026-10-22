@@ -1,4 +1,4 @@
-# DMC Delivery GraphRAG Copilot — Feature Overview
+# CNPD Delivery GraphRAG Copilot — Feature Overview
 
 **Author:** Milind Agarwal
 **Status:** Working prototype (learning / portfolio project)
@@ -60,7 +60,7 @@ Key capabilities delivered:
 - **Safety by design** — synthetic-only data, prompt-injection fencing of
   retrieved content, and a local-first option (no data leaves the machine).
 
-**Anchor demonstration:** "Why did an acceptance test fail after the cSAEGW-C
+**Anchor demonstration:** "Why did an acceptance test fail after the SAEGW-C
 upgrade, and what fix is supported by the evidence?" The system traces the chain
 — upgrade → event-parity test failure → triggering defect → raised alarm → FOA
 gate blocked → Production hold — and cites the specific documents for each step.

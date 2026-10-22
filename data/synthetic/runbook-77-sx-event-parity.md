@@ -5,11 +5,11 @@
 ## When to use
 
 Use when test case TC-204 (Sx event-parity) fails or alarm ALM-SX-DOWN is raised
-on the cSAEGW-C after an upgrade.
+on the SAEGW-C after an upgrade.
 
 ## Diagnosis steps
 
-1. Confirm ALM-SX-DOWN is active on the Sx interface (cSAEGW-C ↔ cSAEGW-U).
+1. Confirm ALM-SX-DOWN is active on the Sx interface (SAEGW-C ↔ SAEGW-U).
 2. Check whether a warm restart of the PCC policy engine occurred recently.
 3. Compare event-parity counters between control and user plane.
 4. If counters reset coincides with a warm restart, this is defect DEF-1203.

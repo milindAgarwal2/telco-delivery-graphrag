@@ -1,4 +1,4 @@
-# 🕸️ DMC Delivery GraphRAG Copilot
+# 🕸️ CNPD Delivery GraphRAG Copilot
 
 A **learning project** exploring **GraphRAG** (knowledge-graph–augmented retrieval)
 over the delivery lifecycle of a cloud-native 5G/telecom program — requirements →
@@ -25,9 +25,9 @@ This is a **learning project** and the repo is intended to be **shareable**. The
 
 - **Only synthetic / sanitized data is committed** — everything in `data/synthetic/`
   is invented (fake releases, fake network-function names, made-up test cases and
-  defects). It resembles real DMC artifacts in *shape* but contains **no real
+  defects). It resembles real CNPD artifacts in *shape* but contains **no real
   customer, subscriber, node, or confidential information**.
-- **Real DMC material NEVER goes in the repo.** If you experiment against real
+- **Real CNPD material NEVER goes in the repo.** If you experiment against real
   documents, place them under `data/private/` — which is **git-ignored**. Do not
   commit production logs, customer identifiers, credentials, PCAPs, IMSIs, node
   names, or control-plane addresses.
@@ -45,7 +45,7 @@ interfaces, and services are affected?"). Those are **graph-traversal** problems
 This project builds in two phases so the value of the graph is **demonstrated, not
 assumed**:
 
-- **Phase 1 — RAG baseline:** ingest the synthetic DMC documents, answer retrieval
+- **Phase 1 — RAG baseline:** ingest the synthetic CNPD documents, answer retrieval
   questions. (Reuses the parent project's ingestion + embeddings + LLM providers.)
 - **Phase 2 — Graph layer:** extract entities + relationships into a graph and answer
   the dependency/impact questions RAG can't. The anchor demo is the acceptance-test
@@ -97,7 +97,7 @@ Document       ──describes──>       Configuration
 
 ## MVP scope (deliberately small)
 
-- ~10 synthetic DMC-style documents
+- ~10 synthetic CNPD-style documents
 - ~5 releases, ~1–2 dozen test cases, a handful of defects, 3 environments
 - ~50–100 graph nodes, ~100–200 relationships
 - **One** anchor workflow answered end-to-end: *acceptance-test failure after upgrade*
@@ -133,8 +133,8 @@ layer over the core modules — it changes nothing in `src/`.
 ### CLI
 
 ```bash
-./.venv/bin/python -m src.rag --graph "Which test cases and documents are impacted by the cSAEGW-C upgrade, and what blocks FOA readiness?"
-./.venv/bin/python -m src.rag --no-graph "Why did the acceptance test fail after the cSAEGW-C upgrade?"
+./.venv/bin/python -m src.rag --graph "Which test cases and documents are impacted by the SAEGW-C upgrade, and what blocks FOA readiness?"
+./.venv/bin/python -m src.rag --no-graph "Why did the acceptance test fail after the SAEGW-C upgrade?"
 ./.venv/bin/python -m src.graph_retrieval TC-204    # impact report for any entity
 ```
 

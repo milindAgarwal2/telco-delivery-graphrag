@@ -4,7 +4,7 @@ Ported from the parent ChatBOT project's ``embeddingEngine.py`` and trimmed to
 what the baseline needs: the FastEmbed + Chroma vector store, character-based
 chunking, and the content-hash UPSERT that prevents duplicate chunks on
 re-ingest. The PDF/PPTX/Spire/PyMuPDF machinery is intentionally NOT ported —
-the synthetic DMC corpus is markdown/text/JSON, so this module adds a
+the synthetic CNPD corpus is markdown/text/JSON, so this module adds a
 lightweight text/markdown/JSON ingester instead.
 
 Vector-store settings (collection, persist dir, embedding model) come from
@@ -139,7 +139,7 @@ def store_text_embedding(text_chunks, vectorstore, file, section, doc_hash=None)
 
     Metadata mirrors ChatBOT's shape where it makes sense (file_name, doc_hash)
     but uses a ``section`` label (markdown heading path or "body") in place of a
-    PDF page number, since the DMC corpus is text/markdown.
+    PDF page number, since the CNPD corpus is text/markdown.
     """
     docs = []
     for text in text_chunks:

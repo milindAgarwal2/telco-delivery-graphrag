@@ -4,7 +4,7 @@ Turns the knowledge graph into extra, relationship-aware context for the
 answerer. This is the piece that lets the system answer *dependency / impact*
 questions that plain vector RAG cannot:
 
-    "Which test cases and documents are impacted by the cSAEGW-C upgrade,
+    "Which test cases and documents are impacted by the SAEGW-C upgrade,
      and what blocks FOA readiness?"
 
 Vector RAG retrieves passages that are *textually similar* to the question. It
@@ -15,13 +15,13 @@ the whole chain. The graph makes that chain explicit and traversable.
 Flow
 ----
 1. **Anchor detection** — find graph entities mentioned in the question (by ID
-   like ``TC-204`` or by known name/alias like ``cSAEGW-C``). If none are found
+   like ``TC-204`` or by known name/alias like ``SAEGW-C``). If none are found
    in the question text, fall back to anchors mentioned in the vector hits'
    metadata/content so the graph still contributes.
 2. **Traversal** — for each anchor, pull its ``impacted_subgraph`` (bidirectional
    BFS to ``max_hops``).
 3. **Serialization** — render the reached relationships as compact, cited lines
-   (``TC-204 --blocked_by--> DEF-1203  [source: aat-test-results-dmc-24.3.md]``)
+   (``TC-204 --blocked_by--> DEF-1203  [source: aat-test-results-cnpd-24.3.md]``)
    that slot into the LLM context next to the vector passages.
 
 The graph context is produced as plain text so it reuses the exact same
@@ -48,11 +48,11 @@ _ID_RE = re.compile(
 )
 
 # Named entities that aren't ID-shaped, with lightweight aliases so natural
-# phrasing still anchors ("the SAE gateway control plane" -> cSAEGW-C).
+# phrasing still anchors ("the SAE gateway control plane" -> SAEGW-C).
 _NAME_ALIASES = {
-    "cSAEGW-C": ["csaegw-c", "saegw-c", "saegw control", "control plane of the combined sae"],
-    "cSAEGW-U": ["csaegw-u", "saegw-u", "user plane of the combined sae"],
-    "cMME": ["cmme", "mme", "mobility management"],
+    "SAEGW-C": ["saegw-c", "csaegw-c", "saegw control", "control plane of the combined sae"],
+    "SAEGW-U": ["saegw-u", "csaegw-u", "user plane of the combined sae"],
+    "MME": ["mme", "cmme", "mobility management"],
     "PCC": ["pcc", "policy control"],
     "PCG": ["pcg", "charging gateway"],
     "FOA": ["foa", "first office application"],
@@ -60,7 +60,7 @@ _NAME_ALIASES = {
     "Lab": ["lab acceptance", "lab environment"],
     "Sx": ["sx interface", "sx event", "event-parity", "event parity"],
     "S1-AP": ["s1-ap", "s1ap"],
-    "DMC-24.3": ["dmc 24.3", "release 24.3", "dmc release 24.3"],
+    "CNPD-24.3": ["cnpd 24.3", "release 24.3", "cnpd release 24.3"],
 }
 
 

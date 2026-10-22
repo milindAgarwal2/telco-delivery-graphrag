@@ -1,13 +1,13 @@
 """Deterministic entity + relationship extractor (Phase 2).
 
-Builds the delivery knowledge graph from the synthetic DMC corpus and persists
+Builds the delivery knowledge graph from the synthetic CNPD corpus and persists
 it via :class:`src.graph.GraphStore`.
 
 Why deterministic (not LLM-assisted) for this corpus
 ----------------------------------------------------
 The synthetic documents use a small, consistent vocabulary of **typed IDs**
 (``TC-204``, ``DEF-1203``, ``ALM-SX-DOWN``, ``MOP-5521``, ``CIQ-8807``,
-``NIR-3310``, ``RUN-77``), named **network functions** (cSAEGW-C/-U, cMME, PCC,
+``NIR-3310``, ``RUN-77``), named **network functions** (SAEGW-C/-U, MME, PCC,
 PCG), **software versions** (``24.3.0-cp`` …), **environments** (Lab/FOA/
 Production) and a fixed set of **relationship verbs** (validates, blocked_by,
 fixed_in, requires, gates, precedes, deployed_on, observed_on, describes …).
@@ -46,7 +46,7 @@ SYNTHETIC_DIR = os.path.join(
 )
 
 # --- Fixed vocabularies (grounded in the synthetic corpus) ------------------
-NETWORK_FUNCTIONS = ["cSAEGW-C", "cSAEGW-U", "cMME", "PCC", "PCG"]
+NETWORK_FUNCTIONS = ["SAEGW-C", "SAEGW-U", "MME", "PCC", "PCG"]
 ENVIRONMENTS = ["Lab", "FOA", "Production"]
 INTERFACES = ["Sx", "S1-AP"]
 
@@ -64,20 +64,20 @@ ID_PATTERNS = [
 VERSION_RE = re.compile(r"\b\d+\.\d+(?:\.\d+)?(?:-[a-z]+)?\b")
 
 # Document node for the release itself.
-RELEASE_ID = "DMC-24.3"
+RELEASE_ID = "CNPD-24.3"
 
 # Per-CNF release notes (Option-1 modeling). Each is a ReleaseNote node that
 # documents exactly one CNF + its certified version. Keyed id -> (label, file,
-# nf, version). The consolidated DMC release note no longer exists; the program
+# nf, version). The consolidated CNPD release note no longer exists; the program
 # view is assembled by the integration matrix below.
-INTEGRATION_MATRIX_FILE = "dmc-24.3-integration-matrix.md"
+INTEGRATION_MATRIX_FILE = "cnpd-24.3-integration-matrix.md"
 RELEASE_NOTES = {
-    "RN-cSAEGW-C-24.3.0-cp": ("cSAEGW-C 24.3.0-cp release note",
-                              "release-note-csaegw-c-24.3.0-cp.md", "cSAEGW-C", "24.3.0-cp"),
-    "RN-cSAEGW-U-24.3.0-up": ("cSAEGW-U 24.3.0-up release note",
-                              "release-note-csaegw-u-24.3.0-up.md", "cSAEGW-U", "24.3.0-up"),
-    "RN-cMME-24.3.1": ("cMME 24.3.1 release note",
-                       "release-note-cmme-24.3.1.md", "cMME", "24.3.1"),
+    "RN-SAEGW-C-24.3.0-cp": ("SAEGW-C 24.3.0-cp release note",
+                              "release-note-saegw-c-24.3.0-cp.md", "SAEGW-C", "24.3.0-cp"),
+    "RN-SAEGW-U-24.3.0-up": ("SAEGW-U 24.3.0-up release note",
+                              "release-note-saegw-u-24.3.0-up.md", "SAEGW-U", "24.3.0-up"),
+    "RN-MME-24.3.1": ("MME 24.3.1 release note",
+                       "release-note-mme-24.3.1.md", "MME", "24.3.1"),
     "RN-PCC-7.2.0": ("PCC 7.2.0 release note",
                      "release-note-pcc-7.2.0.md", "PCC", "7.2.0"),
     "RN-PCG-7.2.0": ("PCG 7.2.0 release note",
@@ -108,8 +108,8 @@ def extract_entities(graph, docs):
     """First pass: create all nodes (documents, releases, NFs, versions,
     environments, interfaces, and every typed ID encountered)."""
     # Core fixed-vocabulary entities (present across the corpus).
-    graph.add_node(RELEASE_ID, "Release", label="DMC Release 24.3")
-    graph.add_node("ECDS-7.2", "Release", label="ECDS Release 7.2")
+    graph.add_node(RELEASE_ID, "Release", label="CNPD Release 24.3")
+    graph.add_node("PCS-7.2", "Release", label="PCS Release 7.2")
     for nf in NETWORK_FUNCTIONS:
         graph.add_node(nf, "NetworkFunction", label=nf)
     for env in ENVIRONMENTS:
@@ -140,89 +140,89 @@ def extract_entities(graph, docs):
 RELATIONSHIPS = [
     # (src, rel, dst, provenance_doc)
     # --- Release composition / versions (now sourced from the integration
-    #     matrix, which assembles the per-CNF versions into DMC 24.3) ---
-    ("ECDS-7.2", "supports", "DMC-24.3", INTEGRATION_MATRIX_FILE),
-    ("DMC-24.3", "includes", "24.3.0-cp", INTEGRATION_MATRIX_FILE),
-    ("DMC-24.3", "includes", "24.3.0-up", INTEGRATION_MATRIX_FILE),
-    ("DMC-24.3", "includes", "24.3.1", INTEGRATION_MATRIX_FILE),
-    ("DMC-24.3", "includes", "7.2.0", INTEGRATION_MATRIX_FILE),
+    #     matrix, which assembles the per-CNF versions into CNPD 24.3) ---
+    ("PCS-7.2", "supports", "CNPD-24.3", INTEGRATION_MATRIX_FILE),
+    ("CNPD-24.3", "includes", "24.3.0-cp", INTEGRATION_MATRIX_FILE),
+    ("CNPD-24.3", "includes", "24.3.0-up", INTEGRATION_MATRIX_FILE),
+    ("CNPD-24.3", "includes", "24.3.1", INTEGRATION_MATRIX_FILE),
+    ("CNPD-24.3", "includes", "7.2.0", INTEGRATION_MATRIX_FILE),
     # Cross-CNF compatibility (certified_with) — from the integration matrix.
     ("24.3.0-cp", "certified_with", "24.3.0-up", INTEGRATION_MATRIX_FILE),
     ("24.3.0-cp", "certified_with", "7.2.0", INTEGRATION_MATRIX_FILE),
     # Minimum-version requirements (cross-CNF) — from the integration matrix.
     ("24.3.0-cp", "requires_min_version", "7.2.0", INTEGRATION_MATRIX_FILE),
     # --- NF -> version (now sourced from each per-CNF release note) ---
-    ("cSAEGW-C", "runs", "24.3.0-cp", "release-note-csaegw-c-24.3.0-cp.md"),
-    ("cSAEGW-U", "runs", "24.3.0-up", "release-note-csaegw-u-24.3.0-up.md"),
-    ("cMME", "runs", "24.3.1", "release-note-cmme-24.3.1.md"),
+    ("SAEGW-C", "runs", "24.3.0-cp", "release-note-saegw-c-24.3.0-cp.md"),
+    ("SAEGW-U", "runs", "24.3.0-up", "release-note-saegw-u-24.3.0-up.md"),
+    ("MME", "runs", "24.3.1", "release-note-mme-24.3.1.md"),
     ("PCC", "runs", "7.2.0", "release-note-pcc-7.2.0.md"),
     ("PCG", "runs", "7.2.0", "release-note-pcg-7.2.0.md"),
     # --- Each ReleaseNote documents its CNF + version; PCC/CNF notes report
     #     their own defects (provenance now correctly per-CNF) ---
-    ("RN-cSAEGW-C-24.3.0-cp", "documents", "cSAEGW-C", "release-note-csaegw-c-24.3.0-cp.md"),
-    ("RN-cSAEGW-C-24.3.0-cp", "documents", "24.3.0-cp", "release-note-csaegw-c-24.3.0-cp.md"),
-    ("RN-cSAEGW-C-24.3.0-cp", "reports", "DEF-1187", "release-note-csaegw-c-24.3.0-cp.md"),
-    ("RN-cSAEGW-U-24.3.0-up", "documents", "cSAEGW-U", "release-note-csaegw-u-24.3.0-up.md"),
-    ("RN-cSAEGW-U-24.3.0-up", "documents", "24.3.0-up", "release-note-csaegw-u-24.3.0-up.md"),
-    ("RN-cMME-24.3.1", "documents", "cMME", "release-note-cmme-24.3.1.md"),
-    ("RN-cMME-24.3.1", "documents", "24.3.1", "release-note-cmme-24.3.1.md"),
-    ("RN-cMME-24.3.1", "reports", "DEF-1250", "release-note-cmme-24.3.1.md"),
+    ("RN-SAEGW-C-24.3.0-cp", "documents", "SAEGW-C", "release-note-saegw-c-24.3.0-cp.md"),
+    ("RN-SAEGW-C-24.3.0-cp", "documents", "24.3.0-cp", "release-note-saegw-c-24.3.0-cp.md"),
+    ("RN-SAEGW-C-24.3.0-cp", "reports", "DEF-1187", "release-note-saegw-c-24.3.0-cp.md"),
+    ("RN-SAEGW-U-24.3.0-up", "documents", "SAEGW-U", "release-note-saegw-u-24.3.0-up.md"),
+    ("RN-SAEGW-U-24.3.0-up", "documents", "24.3.0-up", "release-note-saegw-u-24.3.0-up.md"),
+    ("RN-MME-24.3.1", "documents", "MME", "release-note-mme-24.3.1.md"),
+    ("RN-MME-24.3.1", "documents", "24.3.1", "release-note-mme-24.3.1.md"),
+    ("RN-MME-24.3.1", "reports", "DEF-1250", "release-note-mme-24.3.1.md"),
     ("RN-PCC-7.2.0", "documents", "PCC", "release-note-pcc-7.2.0.md"),
     ("RN-PCC-7.2.0", "documents", "7.2.0", "release-note-pcc-7.2.0.md"),
     ("RN-PCC-7.2.0", "reports", "DEF-1203", "release-note-pcc-7.2.0.md"),
     ("RN-PCG-7.2.0", "documents", "PCG", "release-note-pcg-7.2.0.md"),
     ("RN-PCG-7.2.0", "documents", "7.2.0", "release-note-pcg-7.2.0.md"),
     # Required procedures / documents for the release (now via integration matrix)
-    ("DMC-24.3", "requires", "MOP-5521", INTEGRATION_MATRIX_FILE),
-    ("DMC-24.3", "requires", "CIQ-8807", INTEGRATION_MATRIX_FILE),
-    ("DMC-24.3", "requires", "NIR-3310", INTEGRATION_MATRIX_FILE),
-    # MOP describes the cSAEGW-C upgrade to 24.3.0-cp
-    ("MOP-5521", "upgrades", "cSAEGW-C", "mop-5521-upgrade-csaegw-c.md"),
-    ("MOP-5521", "applies_version", "24.3.0-cp", "mop-5521-upgrade-csaegw-c.md"),
+    ("CNPD-24.3", "requires", "MOP-5521", INTEGRATION_MATRIX_FILE),
+    ("CNPD-24.3", "requires", "CIQ-8807", INTEGRATION_MATRIX_FILE),
+    ("CNPD-24.3", "requires", "NIR-3310", INTEGRATION_MATRIX_FILE),
+    # MOP describes the SAEGW-C upgrade to 24.3.0-cp
+    ("MOP-5521", "upgrades", "SAEGW-C", "mop-5521-upgrade-saegw-c.md"),
+    ("MOP-5521", "applies_version", "24.3.0-cp", "mop-5521-upgrade-saegw-c.md"),
     ("CIQ-8807", "describes", "MOP-5521", "ciq-8807-foa-parameters.md"),
     # Test cases validate NFs / features
-    ("TC-204", "validates", "cSAEGW-C", "test-case-catalog-dmc-24.3.md"),
-    ("TC-204", "validates", "Sx", "test-case-catalog-dmc-24.3.md"),
-    ("TC-205", "validates", "cSAEGW-C", "test-case-catalog-dmc-24.3.md"),
-    ("TC-205", "validates", "MOP-5521", "test-case-catalog-dmc-24.3.md"),
-    ("TC-209", "validates", "PCC", "test-case-catalog-dmc-24.3.md"),
-    ("TC-311", "validates", "cMME", "test-case-catalog-dmc-24.3.md"),
-    ("TC-311", "validates", "S1-AP", "test-case-catalog-dmc-24.3.md"),
+    ("TC-204", "validates", "SAEGW-C", "test-case-catalog-cnpd-24.3.md"),
+    ("TC-204", "validates", "Sx", "test-case-catalog-cnpd-24.3.md"),
+    ("TC-205", "validates", "SAEGW-C", "test-case-catalog-cnpd-24.3.md"),
+    ("TC-205", "validates", "MOP-5521", "test-case-catalog-cnpd-24.3.md"),
+    ("TC-209", "validates", "PCC", "test-case-catalog-cnpd-24.3.md"),
+    ("TC-311", "validates", "MME", "test-case-catalog-cnpd-24.3.md"),
+    ("TC-311", "validates", "S1-AP", "test-case-catalog-cnpd-24.3.md"),
     # Defects: status / affects / fixed_in / blocks
-    ("DEF-1187", "fixed_in", "24.3.0-cp", "defect-register-dmc-24.3.md"),
-    ("DEF-1250", "fixed_in", "24.3.1", "defect-register-dmc-24.3.md"),
-    ("DEF-1250", "validated_by", "TC-311", "defect-register-dmc-24.3.md"),
-    ("DEF-1203", "affects", "PCC", "defect-register-dmc-24.3.md"),
-    ("DEF-1203", "observed_alarm", "ALM-SX-DOWN", "defect-register-dmc-24.3.md"),
+    ("DEF-1187", "fixed_in", "24.3.0-cp", "defect-register-cnpd-24.3.md"),
+    ("DEF-1250", "fixed_in", "24.3.1", "defect-register-cnpd-24.3.md"),
+    ("DEF-1250", "validated_by", "TC-311", "defect-register-cnpd-24.3.md"),
+    ("DEF-1203", "affects", "PCC", "defect-register-cnpd-24.3.md"),
+    ("DEF-1203", "observed_alarm", "ALM-SX-DOWN", "defect-register-cnpd-24.3.md"),
     # The anchor failure chain
-    ("TC-204", "blocked_by", "DEF-1203", "aat-test-results-dmc-24.3.md"),
-    ("TC-209", "blocked_by", "DEF-1203", "aat-test-results-dmc-24.3.md"),
-    ("TC-204", "raised_alarm", "ALM-SX-DOWN", "aat-test-results-dmc-24.3.md"),
-    ("TC-204", "tested_in", "FOA", "aat-test-results-dmc-24.3.md"),
-    ("DEF-1203", "fixed_in_release", "DMC-24.4", "defect-register-dmc-24.3.md"),
+    ("TC-204", "blocked_by", "DEF-1203", "aat-test-results-cnpd-24.3.md"),
+    ("TC-209", "blocked_by", "DEF-1203", "aat-test-results-cnpd-24.3.md"),
+    ("TC-204", "raised_alarm", "ALM-SX-DOWN", "aat-test-results-cnpd-24.3.md"),
+    ("TC-204", "tested_in", "FOA", "aat-test-results-cnpd-24.3.md"),
+    ("DEF-1203", "fixed_in_release", "CNPD-24.4", "defect-register-cnpd-24.3.md"),
     # Runbook / troubleshooting
     ("RUN-77", "diagnoses", "ALM-SX-DOWN", "runbook-77-sx-event-parity.md"),
     ("RUN-77", "diagnoses", "TC-204", "runbook-77-sx-event-parity.md"),
     ("RUN-77", "references", "DEF-1203", "runbook-77-sx-event-parity.md"),
     ("RUN-77", "references", "MOP-5521", "runbook-77-sx-event-parity.md"),
     # Alarms observed on NFs / interfaces
-    ("ALM-SX-DOWN", "observed_on", "cSAEGW-C", "alarm-catalog-packet-core.md"),
+    ("ALM-SX-DOWN", "observed_on", "SAEGW-C", "alarm-catalog-packet-core.md"),
     ("ALM-SX-DOWN", "monitors", "Sx", "alarm-catalog-packet-core.md"),
-    ("ALM-S1AP-TIMER", "observed_on", "cMME", "alarm-catalog-packet-core.md"),
+    ("ALM-S1AP-TIMER", "observed_on", "MME", "alarm-catalog-packet-core.md"),
     ("ALM-S1AP-TIMER", "monitors", "S1-AP", "alarm-catalog-packet-core.md"),
     ("ALM-PCG-CHG", "observed_on", "PCG", "alarm-catalog-packet-core.md"),
     # Interfaces between NFs
-    ("Sx", "between", "cSAEGW-C", "hld-packet-core-24.x.md"),
-    ("Sx", "between", "cSAEGW-U", "hld-packet-core-24.x.md"),
-    ("S1-AP", "between", "cMME", "hld-packet-core-24.x.md"),
+    ("Sx", "between", "SAEGW-C", "hld-packet-core-24.x.md"),
+    ("Sx", "between", "SAEGW-U", "hld-packet-core-24.x.md"),
+    ("S1-AP", "between", "MME", "hld-packet-core-24.x.md"),
     # Deployment topology (NIR): NFs deployed on environments
-    ("cSAEGW-C", "deployed_on", "FOA", "nir-3310-implementation-record.md"),
-    ("cSAEGW-U", "deployed_on", "FOA", "nir-3310-implementation-record.md"),
-    ("cMME", "deployed_on", "FOA", "nir-3310-implementation-record.md"),
+    ("SAEGW-C", "deployed_on", "FOA", "nir-3310-implementation-record.md"),
+    ("SAEGW-U", "deployed_on", "FOA", "nir-3310-implementation-record.md"),
+    ("MME", "deployed_on", "FOA", "nir-3310-implementation-record.md"),
     ("PCC", "deployed_on", "FOA", "nir-3310-implementation-record.md"),
     ("PCG", "deployed_on", "FOA", "nir-3310-implementation-record.md"),
     # Gating / environment progression (the impact spine)
-    ("TC-204", "gates", "FOA", "aat-test-results-dmc-24.3.md"),
+    ("TC-204", "gates", "FOA", "aat-test-results-cnpd-24.3.md"),
     ("Lab", "gates", "FOA", "nir-3310-implementation-record.md"),
     ("FOA", "precedes", "Production", "nir-3310-implementation-record.md"),
 ]
@@ -233,7 +233,7 @@ def extract_relationships(graph):
     carries its provenance document so answers can cite where a link came
     from. Also ensure any version/release endpoints exist."""
     # Make sure release endpoints referenced only in rules exist.
-    graph.add_node("DMC-24.4", "Release", label="DMC Release 24.4 (future)")
+    graph.add_node("CNPD-24.4", "Release", label="CNPD Release 24.4 (future)")
     for src, rel, dst, doc in RELATIONSHIPS:
         graph.add_edge(src, rel, dst, source_doc=doc)
 

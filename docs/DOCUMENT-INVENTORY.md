@@ -1,6 +1,6 @@
-# DMC Delivery GraphRAG — Document Inventory
+# CNPD Delivery GraphRAG — Document Inventory
 
-**Project:** telco-delivery-graphrag (learning/portfolio GraphRAG over a 5G/telecom DMC delivery lifecycle)
+**Project:** telco-delivery-graphrag (learning/portfolio GraphRAG over a 5G/telecom CNPD delivery lifecycle)
 **Purpose of this document:** A complete list of the documents the project uses today, plus the document types the model expects or anticipates — so real-world comparative documents can be scouted.
 
 > Note on data policy: Only synthetic/sanitized data lives in the repo (`data/synthetic/`). Any real documents must go in the git-ignored `data/private/` and must never be committed.
@@ -13,14 +13,16 @@ These are the 10 synthetic files currently ingested and modeled into the knowled
 
 | # | Synthetic file | Type | Content it carries | Real comparative to look for |
 |---|---|---|---|---|
-| 1 | release-note-dmc-24.3.md | Release Note | NF versions, features, known issues, required procedures, gating | Vendor CNF/program release notes, software bulletins, CPI docs (PDF) |
-| 2 | mop-5521-upgrade-csaegw-c.md | MOP | Upgrade steps, prerequisites, rollback, post-checks | Method of Procedure / change runbook (ServiceNow/Remedy change record, Word/PDF) |
+| 1a | release-note-saegw-c-24.3.0-cp.md | Release Note (per-CNF) | SAEGW-C features, fixed defects, known issues | Vendor per-CNF release note / software bulletin (PDF) |
+| 1b | release-note-saegw-u-24.3.0-up.md, release-note-mme-24.3.1.md, release-note-pcc-7.2.0.md, release-note-pcg-7.2.0.md | Release Note (per-CNF) | One note per network function, each on its own version cadence | Vendor per-CNF release notes (PDF) |
+| 1c | cnpd-24.3-integration-matrix.md | Integration/Compatibility Matrix | Which CNF versions are certified together; cross-CNF compatibility + minimum-version notes | Assembled integration/compatibility matrix (often Excel) |
+| 2 | mop-5521-upgrade-saegw-c.md | MOP | Upgrade steps, prerequisites, rollback, post-checks | Method of Procedure / change runbook (ServiceNow/Remedy change record, Word/PDF) |
 | 3 | ciq-8807-foa-parameters.md | CIQ | Per-environment parameters (pool size, heartbeat, policy profile, endpoints) | Customer Information Questionnaire — usually Excel/XLSX |
 | 4 | nir-3310-implementation-record.md | NIR | Deployment topology, NFs per env, interfaces, environment progression | Network Implementation Record / As-Built / LLD |
 | 5 | hld-packet-core-24.x.md | HLD | NFs, interfaces, environment model, delivery lifecycle | High-Level Design / solution design (Word/PDF + Visio) |
-| 6 | aat-test-results-dmc-24.3.md | Test Results | Pass/fail per test case, failure analysis, FOA readiness | AAT/UAT acceptance test report (ALM/qTest/Xray/TestRail export, Excel/PDF) |
-| 7 | test-case-catalog-dmc-24.3.md | Test Catalog | Test cases with validates/preconditions/pass criteria | Test plan / test repository (ALM/Xray/TestRail, Excel) |
-| 8 | defect-register-dmc-24.3.md | Defect Register | Defects with severity, status, fixed_in, blocks | Jira / ServiceNow / vendor trouble-ticket (TR/CSR) export |
+| 6 | aat-test-results-cnpd-24.3.md | Test Results | Pass/fail per test case, failure analysis, FOA readiness | AAT/UAT acceptance test report (ALM/qTest/Xray/TestRail export, Excel/PDF) |
+| 7 | test-case-catalog-cnpd-24.3.md | Test Catalog | Test cases with validates/preconditions/pass criteria | Test plan / test repository (ALM/Xray/TestRail, Excel) |
+| 8 | defect-register-cnpd-24.3.md | Defect Register | Defects with severity, status, fixed_in, blocks | Jira / ServiceNow / vendor trouble-ticket (TR/CSR) export |
 | 9 | alarm-catalog-packet-core.md | Alarm Catalog | Alarm definitions, causes, first actions | Vendor alarm/FM dictionary, or live EMS/NMS alarm export |
 | 10 | runbook-77-sx-event-parity.md | Runbook | When-to-use, diagnosis steps, recommended fix | Ops runbook / KB article / SOP |
 
@@ -32,11 +34,11 @@ These came out of design discussions and the graph's structure. They are not in 
 
 ### A. Per-CNF release notes
 
-Real release notes are published per CNF (containerized network function) by the vendor, not as one consolidated DMC note. So instead of file #1 above, reality gives you:
+Real release notes are published per CNF (containerized network function) by the vendor, not as one consolidated CNPD note. So instead of file #1 above, reality gives you:
 
-- release-note-cSAEGW-C-<ver> (control plane)
-- release-note-cSAEGW-U-<ver> (user plane)
-- release-note-cMME-<ver>
+- release-note-SAEGW-C-<ver> (control plane)
+- release-note-SAEGW-U-<ver> (user plane)
+- release-note-MME-<ver>
 - release-note-PCC-<ver>
 - release-note-PCG-<ver>
 - Plus an integration / compatibility matrix the delivery team assembles (which CNF versions are certified together). This is often a spreadsheet.

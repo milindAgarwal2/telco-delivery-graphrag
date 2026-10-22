@@ -1,4 +1,4 @@
-"""Streamlit GUI for the DMC Delivery GraphRAG Copilot.
+"""Streamlit GUI for the CNPD Delivery GraphRAG Copilot.
 
 A browser-based front-end so people can ask questions and explore the knowledge
 graph WITHOUT touching Python or the CLI. It is a thin presentation layer over
@@ -125,12 +125,12 @@ def _node_index():
 # Page setup
 # ---------------------------------------------------------------------------
 st.set_page_config(
-    page_title="DMC Delivery GraphRAG Copilot",
+    page_title="CNPD Delivery GraphRAG Copilot",
     page_icon="🕸️",
     layout="wide",
 )
 
-st.title("🕸️ DMC Delivery GraphRAG Copilot")
+st.title("🕸️ CNPD Delivery GraphRAG Copilot")
 st.caption(
     "Ask questions over the (synthetic) 5G/telecom delivery corpus, or explore "
     "the knowledge graph's dependency/impact relationships. Synthetic data only."
@@ -178,7 +178,7 @@ with qa_tab:
     st.subheader("Ask a question")
     st.write(
         "Try a dependency/impact question to see the graph help, e.g. "
-        "_“Which test cases and documents are impacted by the cSAEGW-C upgrade, "
+        "_“Which test cases and documents are impacted by the SAEGW-C upgrade, "
         "and what blocks FOA readiness?”_"
     )
 
@@ -186,7 +186,7 @@ with qa_tab:
         question = st.text_area(
             "Your question",
             value="Which test cases and documents are impacted by the "
-            "cSAEGW-C upgrade, and what blocks FOA readiness?",
+            "SAEGW-C upgrade, and what blocks FOA readiness?",
             height=90,
         )
         submitted = st.form_submit_button("Ask", type="primary")

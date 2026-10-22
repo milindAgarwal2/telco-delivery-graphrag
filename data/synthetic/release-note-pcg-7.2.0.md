@@ -7,11 +7,11 @@
 
 - Network function: **PCG** (charging gateway)
 - Software version: **7.2.0**
-- Vendor stream: ECDS Charging (synthetic)
+- Vendor stream: PCS Charging (synthetic)
 
 ## Features in this version
 
-- Charging gateway alignment to ECDS Release 7.2.
+- Charging gateway alignment to PCS Release 7.2.
 
 ## Defects fixed in this version
 

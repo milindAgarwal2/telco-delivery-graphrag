@@ -1,7 +1,7 @@
 # ===========================================================================
 # SENSITIVE DATA GUARD — read this first.
 # This is a LEARNING project. ONLY synthetic/sanitized data lives in the repo
-# (data/synthetic/). REAL DMC project material must NEVER be committed.
+# (data/synthetic/). REAL CNPD project material must NEVER be committed.
 # Put any real documents under data/private/ — it is git-ignored below.
 # ===========================================================================
 

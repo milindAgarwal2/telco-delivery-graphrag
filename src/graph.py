@@ -13,7 +13,7 @@ dormant ``neo4j_*`` keys in config.json exist for exactly that future.
 Model
 -----
 - **Nodes** are typed and keyed by a stable string ``id`` (e.g. ``"TC-204"``,
-  ``"cSAEGW-C"``). ``type`` is a label like ``TestCase`` / ``NetworkFunction``;
+  ``"SAEGW-C"``). ``type`` is a label like ``TestCase`` / ``NetworkFunction``;
   arbitrary extra properties (``label``, ``status`` …) are allowed.
 - **Edges** are directed and labelled by a ``rel`` (e.g. ``blocked_by``,
   ``fixed_in``, ``validates``). We use a MultiDiGraph so two nodes can be linked

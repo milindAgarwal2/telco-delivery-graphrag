@@ -1,4 +1,4 @@
-"""Smoke tests for the DMC Delivery GraphRAG project.
+"""Smoke tests for the CNPD Delivery GraphRAG project.
 
 These are fast, dependency-light checks that the core wiring holds together:
 - every src module imports,
@@ -52,13 +52,13 @@ def test_graph_builds_from_synthetic():
 
 
 def test_anchor_impact_chain_traversable():
-    """The anchor failure chain must be reachable from the cSAEGW-C upgrade."""
+    """The anchor failure chain must be reachable from the SAEGW-C upgrade."""
     from src.extract import build_graph
 
     g = build_graph(persist=False)
-    reached = {n["id"] for n in g.impacted_subgraph("cSAEGW-C", max_hops=4)["nodes"]}
+    reached = {n["id"] for n in g.impacted_subgraph("SAEGW-C", max_hops=4)["nodes"]}
     for entity in ("TC-204", "DEF-1203", "ALM-SX-DOWN", "FOA", "Production"):
-        assert entity in reached, f"{entity} not reachable from cSAEGW-C"
+        assert entity in reached, f"{entity} not reachable from SAEGW-C"
 
 
 def test_per_cnf_provenance():

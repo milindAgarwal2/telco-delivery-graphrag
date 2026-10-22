@@ -33,7 +33,7 @@ logger = logging.getLogger("rag")
 
 
 def answer_question(user_question, provider=None, use_graph=None):
-    """Answer a question against the ingested DMC corpus.
+    """Answer a question against the ingested CNPD corpus.
 
     Parameters
     ----------
@@ -140,7 +140,7 @@ def main():
         args = [a for a in args if a != "--no-graph"]
 
     question = " ".join(args).strip() or (
-        "Which test cases and documents are impacted by the cSAEGW-C upgrade, "
+        "Which test cases and documents are impacted by the SAEGW-C upgrade, "
         "and what blocks FOA readiness?"
     )
     result = answer_question(question, use_graph=use_graph)

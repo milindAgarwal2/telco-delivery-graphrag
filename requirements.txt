@@ -2,7 +2,7 @@
 # telco-delivery-graphrag — Phase 1 RAG baseline dependencies.
 # Reuses the parent ChatBOT project's proven RAG stack (LangChain + Chroma +
 # FastEmbed + Anthropic), trimmed to what the baseline needs. PDF/PPTX/Streamlit
-# are intentionally deferred (synthetic DMC docs are markdown/text). The Phase 2
+# are intentionally deferred (synthetic CNPD docs are markdown/text). The Phase 2
 # graph layer uses NetworkX (in-process, file-persisted — no server).
 # ===========================================================================
 

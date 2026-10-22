@@ -4,21 +4,21 @@
 
 ## ALM-SX-DOWN
 
-- **Interface:** Sx (cSAEGW-C ↔ cSAEGW-U)
+- **Interface:** Sx (SAEGW-C ↔ SAEGW-U)
 - **Severity:** Major
 - **Meaning:** Sx association degraded or event-parity counters diverging.
-- **observed_on:** cSAEGW-C
+- **observed_on:** SAEGW-C
 - **Common cause:** warm restart of a dependent policy component (see DEF-1203).
 - **Correlates_with:** test case TC-204 failure during event-parity checks.
 - **First action:** consult runbook RUN-77.
 
 ## ALM-S1AP-TIMER
 
-- **Interface:** S1-AP (cMME)
+- **Interface:** S1-AP (MME)
 - **Severity:** Minor
 - **Meaning:** S1-AP timer threshold exceeded; possible re-attach storm.
-- **observed_on:** cMME
-- **Resolved_by:** cMME 24.3.1 (DEF-1250). Validated by TC-311.
+- **observed_on:** MME
+- **Resolved_by:** MME 24.3.1 (DEF-1250). Validated by TC-311.
 
 ## ALM-PCG-CHG
 

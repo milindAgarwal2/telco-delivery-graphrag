@@ -1,13 +1,13 @@
-# Defect Register — DMC 24.3
+# Defect Register — CNPD 24.3
 
 > SYNTHETIC / SANITIZED. Invented defects for a learning project.
 
 ## DEF-1187
 
-- **Title:** cSAEGW-C session drop under rapid bearer churn
+- **Title:** SAEGW-C session drop under rapid bearer churn
 - **Severity:** Major
 - **Status:** Fixed
-- **fixed_in:** cSAEGW-C 24.3.0-cp (DMC Release 24.3)
+- **fixed_in:** SAEGW-C 24.3.0-cp (CNPD Release 24.3)
 - **Description:** Under rapid bearer add/remove churn, the control plane
   dropped a small percentage of sessions. Resolved by the 24.3 control-plane fix.
 
@@ -21,12 +21,12 @@
 - **observed_alarm:** ALM-SX-DOWN during event-parity divergence
 - **Workaround:** Avoid warm restart of the PCC policy engine during the upgrade
   window (see MOP-5521 and the AAT report).
-- **target_fix:** DMC Release 24.4
+- **target_fix:** CNPD Release 24.4
 
 ## DEF-1250
 
-- **Title:** cMME spurious re-attach storm
+- **Title:** MME spurious re-attach storm
 - **Severity:** Minor
 - **Status:** Fixed
-- **fixed_in:** cMME 24.3.1
+- **fixed_in:** MME 24.3.1
 - **validated_by:** TC-311 (S1-AP timer alignment)
