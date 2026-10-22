@@ -5,7 +5,7 @@
 **Audience:** Engineering leadership
 
 > **Scope note.** This is a self-built prototype using **only synthetic,
-> sanitized data**. It is not an Ericsson product and contains no real customer,
+> sanitized data**. It is not a commercial product and contains no real customer,
 > subscriber, node, or confidential information. The intent here is to show a
 > working capability and how the *pattern* aligns with autonomous-network goals.
 
@@ -67,12 +67,12 @@ gate blocked → Production hold — and cites the specific documents for each s
 
 ## 4. Why this matters for the Autonomous Network journey
 
-Ericsson frames autonomous networks around **intent-driven, closed-loop
-operations** across increasing levels of automation. Reaching higher autonomy
-levels depends on machines being able to **reason over relationships** between
-network state, changes, tests, faults, and knowledge — not just store documents.
-This prototype demonstrates that reasoning pattern on the **delivery/assurance**
-side:
+The telecom industry frames autonomous networks around **intent-driven,
+closed-loop operations** across increasing levels of automation. Reaching higher
+autonomy levels depends on machines being able to **reason over relationships**
+between network state, changes, tests, faults, and knowledge — not just store
+documents. This prototype demonstrates that reasoning pattern on the
+**delivery/assurance** side:
 
 | Autonomous-network capability | How this prototype contributes |
 |---|---|
