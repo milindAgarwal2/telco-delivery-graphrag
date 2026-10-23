@@ -319,6 +319,12 @@ question.</p>
 <p>So I built the thing that does: a knowledge graph, sitting next to
 the vector store, that makes those relationships explicit and
 traversable.</p>
+<p><img
+src="https://raw.githubusercontent.com/milindAgarwal2/telco-delivery-graphrag/main/docs/images/rag-vs-graphrag.png"
+alt="Plain RAG returns relevant but disconnected passages; GraphRAG assembles a traversable, cited dependency chain" />
+<em>The same question, two approaches. Plain RAG (left) returns relevant
+passages you must connect yourself; graph-augmented retrieval (right)
+assembles the dependency chain and cites every link.</em></p>
 <hr />
 <h2 id="the-big-picture-how-it-works-in-two-layers">The big picture (how
 it works in two layers)</h2>
@@ -350,6 +356,11 @@ text.</p>
 <p>The result: the answer to <em>“what’s impacted by this upgrade and
 what blocks go-live?”</em> is assembled by walking the graph, not by
 hoping one paragraph happened to state the whole chain.</p>
+<p><img
+src="https://raw.githubusercontent.com/milindAgarwal2/telco-delivery-graphrag/main/docs/images/architecture.png"
+alt="Two-layer architecture: ingestion feeds a vector store, extraction feeds a knowledge graph, and a question draws on both for a cited answer" />
+<em>The two layers over one corpus: a vector store for similarity and a
+knowledge graph for relationships. A question draws on both.</em></p>
 <hr />
 <h2 id="why-a-graph-and-why-not-just-a-bigger-rag">Why a graph, and why
 not just a bigger RAG</h2>
@@ -439,6 +450,12 @@ relationship, draggable and hoverable.</p>
 not just RAG?” — a reviewer picks an entity and immediately
 <em>sees</em> the slice of the delivery lifecycle connected to it, which
 plain document search would never assemble.</p>
+<p><img
+src="https://raw.githubusercontent.com/milindAgarwal2/telco-delivery-graphrag/main/docs/images/knowledge-graph.png"
+alt="The full delivery knowledge graph rendered from the project’s data — 36 nodes and 69 edges, colored by entity type" />
+<em>The whole graph, rendered from the project’s own data: test cases,
+defects, alarms, network functions, versions, release notes, and
+environments, wired together by typed relationships.</em></p>
 <hr />
 <h2 id="a-word-on-the-extractor-deterministic-on-purpose">A word on the
 extractor (deterministic, on purpose)</h2>

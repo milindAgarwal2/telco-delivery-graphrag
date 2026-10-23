@@ -46,6 +46,11 @@ like your question.
 So I built the thing that does: a knowledge graph, sitting next to the vector
 store, that makes those relationships explicit and traversable.
 
+![Plain RAG returns relevant but disconnected passages; GraphRAG assembles a traversable, cited dependency chain](https://raw.githubusercontent.com/milindAgarwal2/telco-delivery-graphrag/main/docs/images/rag-vs-graphrag.png)
+*The same question, two approaches. Plain RAG (left) returns relevant passages you
+must connect yourself; graph-augmented retrieval (right) assembles the dependency
+chain and cites every link.*
+
 ------------------------------------------------------------------------
 
 ## The big picture (how it works in two layers)
@@ -75,6 +80,10 @@ the text.
 The result: the answer to *"what's impacted by this upgrade and what blocks
 go-live?"* is assembled by walking the graph, not by hoping one paragraph
 happened to state the whole chain.
+
+![Two-layer architecture: ingestion feeds a vector store, extraction feeds a knowledge graph, and a question draws on both for a cited answer](https://raw.githubusercontent.com/milindAgarwal2/telco-delivery-graphrag/main/docs/images/architecture.png)
+*The two layers over one corpus: a vector store for similarity and a knowledge
+graph for relationships. A question draws on both.*
 
 ------------------------------------------------------------------------
 
@@ -163,6 +172,11 @@ This is the single clearest one-screen answer to "why GraphRAG and not just
 RAG?" — a reviewer picks an entity and immediately *sees* the slice of the
 delivery lifecycle connected to it, which plain document search would never
 assemble.
+
+![The full delivery knowledge graph rendered from the project's data — 36 nodes and 69 edges, colored by entity type](https://raw.githubusercontent.com/milindAgarwal2/telco-delivery-graphrag/main/docs/images/knowledge-graph.png)
+*The whole graph, rendered from the project's own data: test cases, defects,
+alarms, network functions, versions, release notes, and environments, wired
+together by typed relationships.*
 
 ------------------------------------------------------------------------
 
